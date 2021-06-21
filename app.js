@@ -64,6 +64,7 @@ const getAllTennisPlaces = async () =>{
             coach: "",
             place: entry.Bezeichnung,
             start: "",
+            end: "",
             area: entry.area,
             court: entry.court
         }
@@ -82,6 +83,7 @@ const formatResult = result => result.map(entry => {
         coach: returnEmpty(entry.Trainer),
         place: returnEmpty(entry.Platz),
         start: returnEmpty(formatTime(entry.Start)),
+        end: returnEmpty(formatTime(entry.Ende)),
         area: returnEmpty(entry.area),
         court: returnEmpty(entry.court)
     }
