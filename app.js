@@ -50,7 +50,7 @@ const creatTimeQuery = (dateString, time) => {
         where ( s.idReiter = 6 OR s.idReiter = 7 OR s.idReiter = 12 ) 
         AND b.Datum=${dateString} 
         AND b.Kundennummer>0
-        AND b.Start>=${time}
+        AND b.Ende>${time}
         AND b.Start<${time+100}`;
     return sql;
 }
