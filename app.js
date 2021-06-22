@@ -43,15 +43,13 @@ const formatTime = time => {
 //time as an Integer (ex.: 1900 or 1830)
 //date as 20210629
 const creatTimeQuery = (dateString, time) => {
-    const sql = `select b.Eintrag, t.Kuerzel AS Trainer, b.Start, b.Ende, s.Bezeichnung AS Platz, s.idReiter AS area, s.Spalte AS court  
+    const sql = `select b.Eintrag, b.Kundennummer AS kId, t.Kuerzel AS Trainer, b.Start, b.Ende, s.Bezeichnung AS Platz, s.idReiter AS area, s.Spalte AS court  
         from terminspalten s 
         join belegungen b on s.idReiter=b.Bereich AND s.Spalte = b.Platz 
         left join kundentrainer t on t.ID = b.Trainer
         where ( s.idReiter = 6 OR s.idReiter = 7 OR s.idReiter = 12 ) 
         AND b.Datum=${dateString} 
-        AND b.Kundennummer>0
-        AND b.Ende>${time}
-        AND b.Start<${time+100}`;
+        AND ((b.Ende>${time} AND b.Start<${time+100}) OR (b.Ende='0000' AND b.Start<${time+100}))`;
     return sql;
 }
 const getAllTennisPlaces = async () =>{
@@ -79,7 +77,7 @@ const returnEmpty = string => {
 
 const formatResult = result => result.map(entry => {
     return {
-        entry: returnEmpty(entry.Eintrag),
+        entry: entry.kId < 0 ? "Belegt bzw. Gesperrt." : (returnEmpty(entry.Eintrag)),
         coach: returnEmpty(entry.Trainer),
         place: returnEmpty(entry.Platz),
         start: returnEmpty(formatTime(entry.Start)),
