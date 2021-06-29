@@ -75,9 +75,27 @@ const returnEmpty = string => {
 };
 
 
+const formatEntry = entry => {
+
+
+    if(entry.kId > 0){
+        if(entry.firstname != null && entry.secondname != null){
+            return `${entry.firstname} ${entry.secondname.charAt(0)}.`
+        } else {
+            if(entry.firstname == null){
+                return returnEmpty(entry.secondname);
+            } else {
+                return returnEmpty(entry.firstname);
+            }
+        }
+    }else{
+        return (entry.kId < 0 && entry.type != 2) ? "Belegt bzw. Gesperrt." : (returnEmpty(entry.Eintrag))
+    }
+}
+
 const formatResult = result => result.map(entry => {
     return {
-        entry: (entry.kId < 0 && entry.type != 2) ? "Belegt bzw. Gesperrt." : (returnEmpty(entry.Eintrag)),
+        entry: formatEntry(entry),
         coach: returnEmpty(entry.Trainer),
         place: returnEmpty(entry.Platz),
         start: returnEmpty(formatTime(entry.Start)),
